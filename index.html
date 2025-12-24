@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>预制菜的一生：带您看个明白</title>
+    <style>
+        :root {
+            --primary: #FF7F50;
+            --shadow: #D35400;
+            --bg: #FFF9E6;
+            --text: #4A2B10;
+            --safe-green: #2E7D32;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body, html { 
+            height: 100%; 
+            overflow: hidden; 
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+        }
+
+        /* 滚动容器 */
+        #h5-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        section {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            scroll-snap-align: start;
+            position: relative;
+        }
+
+        /* 标题设计 */
+        .title-area { flex: 0.6; text-align: center; display: flex; flex-direction: column; justify-content: center; }
+        .title-area h1 { font-size: 32px; color: var(--primary); letter-spacing: 1px; }
+        .title-area p { font-size: 20px; font-weight: bold; margin-top: 5px; color: #8B4513; }
+
+        /* 图像区 - 适配图片 */
+        .image-area { 
+            flex: 2; 
+            background: #FFF; 
+            border-radius: 25px; 
+            border: 5px solid #FAD6A5;
+            position: relative;
+            overflow: hidden; /* 确保圆角能剪切图片 */
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+
+        .content-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 核心：保持比例并填满 */
+            display: block;
+        }
+
+        /* 交互引导光圈 */
+        .hotspot {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 100px; height: 100px;
+            border: 6px solid rgba(255,127,80,0.8); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            animation: breathe 2s infinite ease-in-out; pointer-events: none;
+            z-index: 5;
+        }
+        .hotspot::after { content: "点我看详情"; font-size: 18px; color: white; background: var(--primary); padding: 4px 12px; border-radius: 10px; font-weight: bold; }
+        @keyframes breathe { 0% { transform: translate(-50%, -50%) scale(0.8); opacity: 1; } 50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.4; } 100% { transform: translate(-50%, -50%) scale(0.8); opacity: 1; } }
+
+        /* 文案区 */
+        .text-area { flex: 1.2; display: flex; flex-direction: column; justify-content: center; padding: 15px 5px; }
+        .text-area p { font-size: 24px; line-height: 1.5; margin-bottom: 8px; font-weight: 500; }
+
+        /* 强反馈拟物按钮 */
+        .button-area { flex: 0.7; display: flex; align-items: center; justify-content: center; }
+        .push-btn {
+            width: 100%; height: 70px; background: var(--primary); color: white; border: none;
+            border-radius: 35px; font-size: 24px; font-weight: bold;
+            box-shadow: 0 8px 0 var(--shadow); position: relative; transition: all 0.1s;
+        }
+        .push-btn:active { transform: translateY(4px); box-shadow: 0 4px 0 var(--shadow); }
+
+        /* 弹出层 */
+        .popup {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); display: none;
+            justify-content: center; align-items: center; z-index: 100; padding: 20px;
+        }
+        .popup-card {
+            background: white; padding: 25px; border-radius: 25px; width: 100%;
+            max-height: 80vh; overflow-y: auto; border-top: 10px solid var(--primary);
+        }
+        .popup-card h3 { font-size: 26px; color: var(--primary); margin-bottom: 15px; text-align: center; }
+        .info-block { margin-bottom: 18px; background: #FFF9F0; padding: 15px; border-radius: 15px; }
+        .info-title { font-size: 22px; font-weight: bold; color: var(--safe-green); margin-bottom: 5px; display: block; }
+        .info-text { font-size: 20px; line-height: 1.6; color: #333; }
+        .close-btn { background: #95A5A6; width: 100%; padding: 15px; border-radius: 30px; color: white; border: none; font-size: 20px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div id="h5-container">
+    <section id="s0">
+        <div class="title-area">
+            <h1>预制菜的一生</h1>
+            <p>【带您看个清清楚楚】</p>
+        </div>
+        <div class="image-area">
+            <img src="cover.jpg" alt="封面图" class="content-img" onerror="this.src='https://via.placeholder.com/600x800?text=封面插画(cover.jpg)'">
+        </div>
+        <div class="text-area">
+            <p style="text-align: center;">听说这种菜方便又省心，</p>
+            <p style="text-align: center;">咱老百姓吃着到底放不放心？</p>
+            <p style="text-align: center;">跟紧咯，咱去源头探一探！</p>
+        </div>
+        <div class="button-area"><button class="push-btn" onclick="goTo(1)">👉 咱们走着瞧</button></div>
+    </section>
+
+    <section id="s1">
+        <div class="title-area"><h2>第一站：超市里的身份证</h2></div>
+        <div class="image-area" onclick="showPopup('pop1')">
+            <img src="supermarket.jpg" alt="超市挑选" class="content-img" onerror="this.src='https://via.placeholder.com/600x800?text=第一屏插画(supermarket.jpg)'">
+            <div class="hotspot"></div>
+        </div>
+        <div class="text-area">
+            <p>货架上的菜都有“身份证”，</p>
+            <p>只要看准这几样，</p>
+            <p>大厂的菜吃着才稳当。</p>
+        </div>
+        <div class="button-area"><button class="push-btn" onclick="goTo(2)">往回倒：看包装</button></div>
+        <div id="pop1" class="popup">
+            <div class="popup-card">
+                <h3>📜 包装上的秘密</h3>
+                <div class="info-block">
+                    <span class="info-title">● 生产日期：拒绝陈货</span>
+                    <p class="info-text">国家法律严管：过期一律不准卖！大厂都会把日期印在最显眼的地方，买的时候咱多瞅一眼。</p>
+                </div>
+                <div class="info-block">
+                    <span class="info-title">● 配料表：吃个明白</span>
+                    <p class="info-text">里头放了什么肉、什么油、什么调料，都要写得明明白白，让老百姓心里有底。</p>
+                </div>
+                <button class="close-btn" onclick="hidePopup('pop1')">我看明白了</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="s2">
+        <div class="title-area"><h2>第二站：为啥不用防腐剂？</h2></div>
+        <div class="image-area" onclick="showPopup('pop2')">
+            <img src="packaging.jpg" alt="包装细节" class="content-img" onerror="this.src='https://via.placeholder.com/600x800?text=第二屏插画(packaging.jpg)'">
+            <div class="hotspot"></div>
+        </div>
+        <div class="text-area">
+            <p>“放这么久，加了药水吧？”</p>
+            <p>其实秘密不在药水，</p>
+            <p>而是在“这股冷气”里。</p>
+        </div>
+        <div class="button-area"><button class="push-btn" onclick="goTo(3)">往回倒：看加工</button></div>
+        <div id="pop2" class="popup">
+            <div class="popup-card">
+                <h3>❄️ 靠冷气锁住新鲜</h3>
+                <div class="info-block">
+                    <span class="info-title">● 零下18度急速冻透</span>
+                    <p class="info-text">在工厂里用零下几十度的风瞬间把菜冻结。这时候细菌都“冬眠”了，根本不需要加防腐剂。</p>
+                </div>
+                <div class="info-block">
+                    <span class="info-title">● 真空袋隔绝空气</span>
+                    <p class="info-text">把空气抽干，就像给菜穿了隔离衣，没空气细菌就没法繁殖，菜自然放得住。</p>
+                </div>
+                <button class="close-btn" onclick="hidePopup('pop2')">这下放心了</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="s3">
+        <div class="title-area"><h2>第三站：干净的大厨房</h2></div>
+        <div class="image-area" onclick="showPopup('pop3')">
+            <img src="factory.jpg" alt="工厂车间" class="content-img" onerror="this.src='https://via.placeholder.com/600x800?text=第三屏插画(factory.jpg)'">
+            <div class="hotspot"></div>
+        </div>
+        <div class="text-area">
+            <p>工厂做饭，比咱家讲究。</p>
+            <p>工人们穿得像进手术室，</p>
+            <p>几十遍水洗得干干净净。</p>
+        </div>
+        <div class="button-area"><button class="push-btn" onclick="goTo(4)">往回倒：看原料</button></div>
+        <div id="pop3" class="popup">
+            <div class="popup-card">
+                <h3>✨ 工厂里的真功夫</h3>
+                <div class="info-block">
+                    <span class="info-title">● 全副武装保卫生</span>
+                    <p class="info-text">工人进车间要洗手、吹风去尘、换无菌服。苍蝇、灰尘？通通进不去！</p>
+                </div>
+                <div class="info-block">
+                    <span class="info-title">● 自动化洗菜切菜</span>
+                    <p class="info-text">几千万的设备循环洗菜，连一片沙子都留不下。油盐放多少，全靠电脑控制，更健康。</p>
+                </div>
+                <button class="close-btn" onclick="hidePopup('pop3')">真是不错</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="s4">
+        <div class="title-area"><h2>第四站：地里长的最鲜</h2></div>
+        <div class="image-area" onclick="showPopup('pop4')">
+            <img src="farm.jpg" alt="农田原料" class="content-img" onerror="this.src='https://via.placeholder.com/600x800?text=第四屏插画(farm.jpg)'">
+            <div class="hotspot"></div>
+        </div>
+        <div class="text-area">
+            <p>好菜得从源头挑。</p>
+            <p>每棵青菜，每块猪肉，</p>
+            <p>进厂前得先过“安检关”。</p>
+        </div>
+        <div class="button-area"><button class="push-btn" onclick="goTo(5)">最后谁在管？</button></div>
+        <div id="pop4" class="popup">
+            <div class="popup-card">
+                <h3>🔍 进大厂的体检单</h3>
+                <div class="info-block">
+                    <span class="info-title">● 严查农药残留</span>
+                    <p class="info-text">每一批菜都要测。农药超标？退货！不新鲜？退货！只有最好的菜才能下锅。</p>
+                </div>
+                <div class="info-block">
+                    <span class="info-title">● 来历清清楚楚</span>
+                    <p class="info-text">电脑里一扫，哪棵菜是哪个大棚出的都清清楚楚。谁敢乱来，一查就着。</p>
+                </div>
+                <button class="close-btn" onclick="hidePopup('pop4')">还是得大厂</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="s5">
+        <div class="title-area"><h2>第五站：护身符护着咱</h2></div>
+        <div class="image-area">
+            <img src="safety.jpg" alt="安全监管" class="content-img" onerror="this.src='https://via.placeholder.com/600x800?text=第五屏插画(safety.jpg)'">
+        </div>
+        <div class="text-area">
+            <p>国家法律在后头撑腰，</p>
+            <p>有关部门天天在盯着，</p>
+            <p>给老百姓的餐桌保驾护航。</p>
+        </div>
+        <div class="button-area"><button class="push-btn" onclick="goTo(6)">咱们说句心里话</button></div>
+    </section>
+
+    <section id="s6">
+        <div class="title-area"><h1>舒心吃好每一餐</h1></div>
+        <div class="image-area">
+            <img src="enjoy.jpg" alt="温馨用餐" class="content-img" onerror="this.src='https://via.placeholder.com/600x800?text=第六屏插画(enjoy.jpg)'">
+        </div>
+        <div class="text-area">
+            <p>预制菜是生活的好帮手。</p>
+            <p><b>选大厂家，看准日期，</b></p>
+            <p>祝您老两口胃口好，身体旺！</p>
+        </div>
+        <div class="button-area" style="gap: 15px;">
+            <button class="push-btn" style="flex:1; background:#95A5A6; box-shadow:0 8px 0 #7F8C8D;" onclick="goTo(0)">重看</button>
+            <button class="push-btn" style="flex:1;" onclick="alert('分享成功！')">分享</button>
+        </div>
+    </section>
+</div>
+
+<script>
+    function goTo(idx) {
+        const target = document.getElementById('s' + idx);
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+    }
+    function showPopup(id) { document.getElementById(id).style.display = 'flex'; }
+    function hidePopup(id) { document.getElementById(id).style.display = 'none'; }
+</script>
+
+</body>
+</html>
